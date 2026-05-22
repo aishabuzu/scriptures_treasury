@@ -1,0 +1,612 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Scripture Treasury — Promises, Power & Praise</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;1,400&family=Cinzel:wght@400;600&family=Lato:wght@300;400&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --gold: #C9A84C;
+    --gold-light: #E8D09A;
+    --deep: #0D0D0D;
+    --parchment: #FAF6EE;
+    --ink: #1A1409;
+    --muted: #6B5D3F;
+    --line: rgba(201,168,76,0.25);
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    background: var(--deep);
+    color: var(--parchment);
+    font-family: 'Lato', sans-serif;
+    font-weight: 300;
+    min-height: 100vh;
+  }
+
+  /* ── HERO ── */
+  .hero {
+    text-align: center;
+    padding: 70px 24px 50px;
+    background: linear-gradient(180deg, #1a1200 0%, var(--deep) 100%);
+    border-bottom: 1px solid var(--line);
+    position: relative;
+    overflow: hidden;
+  }
+  .hero::before {
+    content: '';
+    position: absolute; inset: 0;
+    background: radial-gradient(ellipse 60% 40% at 50% 0%, rgba(201,168,76,0.12) 0%, transparent 70%);
+    pointer-events: none;
+  }
+  .hero-ornament {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 13px;
+    letter-spacing: 6px;
+    text-transform: uppercase;
+    color: var(--gold);
+    margin-bottom: 18px;
+    opacity: 0.8;
+  }
+  .hero h1 {
+    font-family: 'Cinzel', serif;
+    font-size: clamp(28px, 5vw, 52px);
+    font-weight: 600;
+    color: var(--gold-light);
+    letter-spacing: 2px;
+    line-height: 1.2;
+    margin-bottom: 14px;
+  }
+  .hero p {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 18px;
+    font-style: italic;
+    color: rgba(250,246,238,0.6);
+    max-width: 500px;
+    margin: 0 auto 30px;
+  }
+  .hero-divider {
+    width: 120px; height: 1px;
+    background: linear-gradient(90deg, transparent, var(--gold), transparent);
+    margin: 0 auto;
+  }
+
+  /* ── NAV TABS ── */
+  nav {
+    position: sticky; top: 0; z-index: 100;
+    background: rgba(13,13,13,0.97);
+    border-bottom: 1px solid var(--line);
+    backdrop-filter: blur(10px);
+    overflow-x: auto;
+    scrollbar-width: none;
+  }
+  nav::-webkit-scrollbar { display: none; }
+  .nav-inner {
+    display: flex; align-items: center;
+    gap: 0; padding: 0 16px;
+    min-width: max-content;
+  }
+  .tab {
+    font-family: 'Cinzel', serif;
+    font-size: 11px;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    padding: 16px 18px;
+    color: var(--muted);
+    cursor: pointer;
+    border-bottom: 2px solid transparent;
+    white-space: nowrap;
+    transition: color 0.2s, border-color 0.2s;
+    text-decoration: none;
+  }
+  .tab:hover { color: var(--gold-light); }
+  .tab.active { color: var(--gold); border-bottom-color: var(--gold); }
+
+  /* ── SECTIONS ── */
+  .section { display: none; padding: 0; }
+  .section.active { display: block; }
+
+  .section-hero {
+    padding: 50px 24px 40px;
+    text-align: center;
+    border-bottom: 1px solid var(--line);
+    background: linear-gradient(180deg, rgba(201,168,76,0.04) 0%, transparent 100%);
+  }
+  .section-icon {
+    font-size: 36px; margin-bottom: 12px;
+  }
+  .section-hero h2 {
+    font-family: 'Cinzel', serif;
+    font-size: clamp(22px, 4vw, 38px);
+    font-weight: 600;
+    color: var(--gold-light);
+    letter-spacing: 2px;
+    margin-bottom: 10px;
+  }
+  .section-hero p {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 16px;
+    font-style: italic;
+    color: rgba(250,246,238,0.5);
+  }
+  .verse-count {
+    display: inline-block;
+    margin-top: 14px;
+    font-size: 11px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: var(--gold);
+    background: rgba(201,168,76,0.1);
+    border: 1px solid rgba(201,168,76,0.2);
+    padding: 5px 16px;
+    border-radius: 20px;
+  }
+
+  /* ── GRID ── */
+  .verses-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+    gap: 1px;
+    background: var(--line);
+    border-top: 1px solid var(--line);
+  }
+  .verse-card {
+    background: var(--deep);
+    padding: 28px 30px;
+    transition: background 0.2s;
+    position: relative;
+  }
+  .verse-card:hover { background: rgba(201,168,76,0.04); }
+  .verse-num {
+    font-family: 'Cinzel', serif;
+    font-size: 9px;
+    letter-spacing: 2px;
+    color: rgba(201,168,76,0.4);
+    margin-bottom: 6px;
+    text-transform: uppercase;
+  }
+  .verse-ref {
+    font-family: 'Cinzel', serif;
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--gold);
+    letter-spacing: 0.5px;
+    margin-bottom: 10px;
+  }
+  .verse-text {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 17px;
+    line-height: 1.65;
+    color: rgba(250,246,238,0.88);
+  }
+  .verse-text em {
+    font-style: italic;
+    color: var(--gold-light);
+  }
+
+  /* ── FOOTER ── */
+  footer {
+    text-align: center;
+    padding: 40px 24px;
+    border-top: 1px solid var(--line);
+    font-family: 'Cormorant Garamond', serif;
+    font-style: italic;
+    font-size: 15px;
+    color: rgba(250,246,238,0.3);
+  }
+  footer span { color: var(--gold); opacity: 0.7; }
+</style>
+</head>
+<body>
+
+<div class="hero">
+  <div class="hero-ornament">✦ The Holy Bible ✦</div>
+  <h1>Scripture Treasury</h1>
+  <p>Promises, Power & Praise — a collection of God's living Word</p>
+  <div class="hero-divider"></div>
+</div>
+
+<nav>
+  <div class="nav-inner">
+    <a class="tab active" onclick="show('thanksgiving',this)">Thanksgiving</a>
+    <a class="tab" onclick="show('warfare',this)">Warfare</a>
+    <a class="tab" onclick="show('children',this)">Children</a>
+    <a class="tab" onclick="show('family',this)">Family</a>
+    <a class="tab" onclick="show('promises',this)">Promises</a>
+    <a class="tab" onclick="show('finances',this)">Finances</a>
+    <a class="tab" onclick="show('doors',this)">Open Doors</a>
+    <a class="tab" onclick="show('health',this)">Good Health</a>
+  </div>
+</nav>
+
+<!-- ══════════════════════════════════════════
+     THANKSGIVING
+══════════════════════════════════════════ -->
+<section class="section active" id="thanksgiving">
+  <div class="section-hero">
+    <div class="section-icon">🙏</div>
+    <h2>Scriptures of Thanksgiving</h2>
+    <p>Gratitude is the gateway to God's presence</p>
+    <div class="verse-count">33 scriptures</div>
+  </div>
+  <div class="verses-grid">
+    <div class="verse-card"><div class="verse-num">01</div><div class="verse-ref">Psalm 100:4</div><div class="verse-text">Enter his gates with thanksgiving and his courts with praise; give thanks to him and praise his name.</div></div>
+    <div class="verse-card"><div class="verse-num">02</div><div class="verse-ref">1 Thessalonians 5:18</div><div class="verse-text">Give thanks in all circumstances; for this is God's will for you in Christ Jesus.</div></div>
+    <div class="verse-card"><div class="verse-num">03</div><div class="verse-ref">Colossians 3:17</div><div class="verse-text">And whatever you do, whether in word or deed, do it all in the name of the Lord Jesus, giving thanks to God the Father through him.</div></div>
+    <div class="verse-card"><div class="verse-num">04</div><div class="verse-ref">Psalm 107:1</div><div class="verse-text">Give thanks to the Lord, for he is good; his love endures forever.</div></div>
+    <div class="verse-card"><div class="verse-num">05</div><div class="verse-ref">Philippians 4:6</div><div class="verse-text">Do not be anxious about anything, but in every situation, by prayer and petition, with thanksgiving, present your requests to God.</div></div>
+    <div class="verse-card"><div class="verse-num">06</div><div class="verse-ref">Ephesians 5:20</div><div class="verse-text">Always giving thanks to God the Father for everything, in the name of our Lord Jesus Christ.</div></div>
+    <div class="verse-card"><div class="verse-num">07</div><div class="verse-ref">Hebrews 13:15</div><div class="verse-text">Through Jesus, therefore, let us continually offer to God a sacrifice of praise — the fruit of lips that openly profess his name.</div></div>
+    <div class="verse-card"><div class="verse-num">08</div><div class="verse-ref">Psalm 118:1</div><div class="verse-text">Give thanks to the Lord, for he is good; his love endures forever.</div></div>
+    <div class="verse-card"><div class="verse-num">09</div><div class="verse-ref">Colossians 4:2</div><div class="verse-text">Devote yourselves to prayer, being watchful and thankful.</div></div>
+    <div class="verse-card"><div class="verse-num">10</div><div class="verse-ref">2 Corinthians 9:15</div><div class="verse-text">Thanks be to God for his indescribable gift!</div></div>
+    <div class="verse-card"><div class="verse-num">11</div><div class="verse-ref">Psalm 9:1</div><div class="verse-text">I will give thanks to you, Lord, with all my heart; I will tell of all your wonderful deeds.</div></div>
+    <div class="verse-card"><div class="verse-num">12</div><div class="verse-ref">Psalm 136:1</div><div class="verse-text">Give thanks to the Lord, for he is good. His love endures forever.</div></div>
+    <div class="verse-card"><div class="verse-num">13</div><div class="verse-ref">Daniel 6:10</div><div class="verse-text">Three times a day he got down on his knees and prayed, giving thanks to his God, just as he had done before.</div></div>
+    <div class="verse-card"><div class="verse-num">14</div><div class="verse-ref">Psalm 28:7</div><div class="verse-text">The Lord is my strength and my shield; my heart trusts in him, and he helps me. My heart leaps for joy, and with my song I praise him.</div></div>
+    <div class="verse-card"><div class="verse-num">15</div><div class="verse-ref">Revelation 7:12</div><div class="verse-text">Amen! Praise and glory and wisdom and thanks and honor and power and strength be to our God for ever and ever. Amen!</div></div>
+    <div class="verse-card"><div class="verse-num">16</div><div class="verse-ref">1 Chronicles 16:34</div><div class="verse-text">Give thanks to the Lord, for he is good; his love endures forever.</div></div>
+    <div class="verse-card"><div class="verse-num">17</div><div class="verse-ref">Psalm 69:30</div><div class="verse-text">I will praise God's name in song and glorify him with thanksgiving.</div></div>
+    <div class="verse-card"><div class="verse-num">18</div><div class="verse-ref">Romans 1:21</div><div class="verse-text">For although they knew God, they neither glorified him as God nor gave thanks to him, but their thinking became futile.</div></div>
+    <div class="verse-card"><div class="verse-num">19</div><div class="verse-ref">Psalm 95:2</div><div class="verse-text">Let us come before him with thanksgiving and extol him with music and song.</div></div>
+    <div class="verse-card"><div class="verse-num">20</div><div class="verse-ref">Nehemiah 12:27</div><div class="verse-text">At the dedication of the wall of Jerusalem, the Levites were sought out from where they lived and were brought to Jerusalem to celebrate joyfully the dedication with songs of thanksgiving.</div></div>
+    <div class="verse-card"><div class="verse-num">21</div><div class="verse-ref">Psalm 50:14</div><div class="verse-text">Sacrifice thank offerings to God, fulfill your vows to the Most High.</div></div>
+    <div class="verse-card"><div class="verse-num">22</div><div class="verse-ref">Psalm 30:4</div><div class="verse-text">Sing the praises of the Lord, you his faithful people; praise his holy name.</div></div>
+    <div class="verse-card"><div class="verse-num">23</div><div class="verse-ref">2 Samuel 22:50</div><div class="verse-text">Therefore I will praise you, Lord, among the nations; I will sing the praises of your name.</div></div>
+    <div class="verse-card"><div class="verse-num">24</div><div class="verse-ref">Isaiah 12:4</div><div class="verse-text">In that day you will say: Give praise to the Lord, proclaim his name; make known among the nations what he has done, and proclaim that his name is exalted.</div></div>
+    <div class="verse-card"><div class="verse-num">25</div><div class="verse-ref">Psalm 75:1</div><div class="verse-text">We praise you, God, we praise you, for your Name is near; people tell of your wonderful deeds.</div></div>
+    <div class="verse-card"><div class="verse-num">26</div><div class="verse-ref">1 Timothy 4:4</div><div class="verse-text">For everything God created is good, and nothing is to be rejected if it is received with thanksgiving.</div></div>
+    <div class="verse-card"><div class="verse-num">27</div><div class="verse-ref">Jonah 2:9</div><div class="verse-text">But I, with shouts of grateful praise, will sacrifice to you. What I have vowed I will make good. I will say, 'Salvation comes from the Lord.'</div></div>
+    <div class="verse-card"><div class="verse-num">28</div><div class="verse-ref">Psalm 147:7</div><div class="verse-text">Sing to the Lord with grateful praise; make music to our God on the harp.</div></div>
+    <div class="verse-card"><div class="verse-num">29</div><div class="verse-ref">Psalm 92:1</div><div class="verse-text">It is good to praise the Lord and make music to your name, O Most High.</div></div>
+    <div class="verse-card"><div class="verse-num">30</div><div class="verse-ref">Colossians 2:7</div><div class="verse-text">Rooted and built up in him, strengthened in the faith as you were taught, and overflowing with thankfulness.</div></div>
+    <div class="verse-card"><div class="verse-num">31</div><div class="verse-ref">Psalm 106:1</div><div class="verse-text">Praise the Lord. Give thanks to the Lord, for he is good; his love endures forever.</div></div>
+    <div class="verse-card"><div class="verse-num">32</div><div class="verse-ref">Luke 17:16</div><div class="verse-text">He threw himself at Jesus' feet and thanked him — and he was a Samaritan.</div></div>
+    <div class="verse-card"><div class="verse-num">33</div><div class="verse-ref">Psalm 34:1</div><div class="verse-text">I will extol the Lord at all times; his praise will always be on my lips.</div></div>
+  </div>
+</section>
+
+<!-- ══════════════════════════════════════════
+     WARFARE
+══════════════════════════════════════════ -->
+<section class="section" id="warfare">
+  <div class="section-hero">
+    <div class="section-icon">⚔️</div>
+    <h2>Scriptures of Warfare</h2>
+    <p>The battle belongs to the Lord — stand firm in His victory</p>
+    <div class="verse-count">33 scriptures</div>
+  </div>
+  <div class="verses-grid">
+    <div class="verse-card"><div class="verse-num">01</div><div class="verse-ref">Ephesians 6:11</div><div class="verse-text">Put on the full armor of God, so that you can take your stand against the devil's schemes.</div></div>
+    <div class="verse-card"><div class="verse-num">02</div><div class="verse-ref">2 Corinthians 10:4</div><div class="verse-text">The weapons we fight with are not the weapons of the world. On the contrary, they have divine power to demolish strongholds.</div></div>
+    <div class="verse-card"><div class="verse-num">03</div><div class="verse-ref">Romans 8:37</div><div class="verse-text">No, in all these things we are more than conquerors through him who loved us.</div></div>
+    <div class="verse-card"><div class="verse-num">04</div><div class="verse-ref">1 Peter 5:8</div><div class="verse-text">Be sober-minded; be watchful. Your adversary the devil prowls around like a roaring lion, seeking someone to devour.</div></div>
+    <div class="verse-card"><div class="verse-num">05</div><div class="verse-ref">James 4:7</div><div class="verse-text">Submit yourselves therefore to God. Resist the devil, and he will flee from you.</div></div>
+    <div class="verse-card"><div class="verse-num">06</div><div class="verse-ref">Isaiah 54:17</div><div class="verse-text">No weapon formed against you shall prosper, and every tongue that rises against you in judgment you shall condemn.</div></div>
+    <div class="verse-card"><div class="verse-num">07</div><div class="verse-ref">Psalm 144:1</div><div class="verse-text">Praise be to the Lord my Rock, who trains my hands for war, my fingers for battle.</div></div>
+    <div class="verse-card"><div class="verse-num">08</div><div class="verse-ref">2 Chronicles 20:15</div><div class="verse-text">Do not be afraid or discouraged because of this vast army. For the battle is not yours, but God's.</div></div>
+    <div class="verse-card"><div class="verse-num">09</div><div class="verse-ref">Deuteronomy 20:4</div><div class="verse-text">For the Lord your God is the one who goes with you to fight for you against your enemies to give you victory.</div></div>
+    <div class="verse-card"><div class="verse-num">10</div><div class="verse-ref">Romans 16:20</div><div class="verse-text">The God of peace will soon crush Satan under your feet. The grace of our Lord Jesus be with you.</div></div>
+    <div class="verse-card"><div class="verse-num">11</div><div class="verse-ref">Ephesians 6:13</div><div class="verse-text">Therefore put on the full armor of God, so that when the day of evil comes, you may be able to stand your ground.</div></div>
+    <div class="verse-card"><div class="verse-num">12</div><div class="verse-ref">1 John 4:4</div><div class="verse-text">You, dear children, are from God and have overcome them, because the one who is in you is greater than the one who is in the world.</div></div>
+    <div class="verse-card"><div class="verse-num">13</div><div class="verse-ref">Revelation 12:11</div><div class="verse-text">They triumphed over him by the blood of the Lamb and by the word of their testimony; they did not love their lives so much as to shrink from death.</div></div>
+    <div class="verse-card"><div class="verse-num">14</div><div class="verse-ref">Psalm 91:1–2</div><div class="verse-text">Whoever dwells in the shelter of the Most High will rest in the shadow of the Almighty. I will say of the Lord, "He is my refuge and my fortress, my God, in whom I trust."</div></div>
+    <div class="verse-card"><div class="verse-num">15</div><div class="verse-ref">Zechariah 4:6</div><div class="verse-text">'Not by might nor by power, but by my Spirit,' says the Lord Almighty.</div></div>
+    <div class="verse-card"><div class="verse-num">16</div><div class="verse-ref">Isaiah 59:19</div><div class="verse-text">When the enemy comes in like a flood, the Spirit of the Lord will lift up a standard against him.</div></div>
+    <div class="verse-card"><div class="verse-num">17</div><div class="verse-ref">Psalm 18:34</div><div class="verse-text">He trains my hands for battle; my arms can bend a bow of bronze.</div></div>
+    <div class="verse-card"><div class="verse-num">18</div><div class="verse-ref">Luke 10:19</div><div class="verse-text">I have given you authority to trample on snakes and scorpions and to overcome all the power of the enemy; nothing will harm you.</div></div>
+    <div class="verse-card"><div class="verse-num">19</div><div class="verse-ref">Psalm 27:1</div><div class="verse-text">The Lord is my light and my salvation — whom shall I fear? The Lord is the stronghold of my life — of whom shall I be afraid?</div></div>
+    <div class="verse-card"><div class="verse-num">20</div><div class="verse-ref">2 Timothy 1:7</div><div class="verse-text">For the Spirit God gave us does not make us timid, but gives us power, love and self-discipline.</div></div>
+    <div class="verse-card"><div class="verse-num">21</div><div class="verse-ref">Numbers 10:9</div><div class="verse-text">When you go into battle in your own land against an enemy who is oppressing you, sound a blast on the trumpets. Then you will be remembered by the Lord your God and rescued from your enemies.</div></div>
+    <div class="verse-card"><div class="verse-num">22</div><div class="verse-ref">Psalm 46:1</div><div class="verse-text">God is our refuge and strength, an ever-present help in trouble.</div></div>
+    <div class="verse-card"><div class="verse-num">23</div><div class="verse-ref">Colossians 2:15</div><div class="verse-text">And having disarmed the powers and authorities, he made a public spectacle of them, triumphing over them by the cross.</div></div>
+    <div class="verse-card"><div class="verse-num">24</div><div class="verse-ref">Matthew 16:18</div><div class="verse-text">And I tell you that you are Peter, and on this rock I will build my church, and the gates of Hades will not overcome it.</div></div>
+    <div class="verse-card"><div class="verse-num">25</div><div class="verse-ref">Joshua 1:9</div><div class="verse-text">Have I not commanded you? Be strong and courageous. Do not be afraid; do not be discouraged, for the Lord your God will be with you wherever you go.</div></div>
+    <div class="verse-card"><div class="verse-num">26</div><div class="verse-ref">1 Corinthians 15:57</div><div class="verse-text">But thanks be to God! He gives us the victory through our Lord Jesus Christ.</div></div>
+    <div class="verse-card"><div class="verse-num">27</div><div class="verse-ref">Psalm 34:7</div><div class="verse-text">The angel of the Lord encamps around those who fear him, and he delivers them.</div></div>
+    <div class="verse-card"><div class="verse-num">28</div><div class="verse-ref">Proverbs 21:31</div><div class="verse-text">The horse is made ready for the day of battle, but victory rests with the Lord.</div></div>
+    <div class="verse-card"><div class="verse-num">29</div><div class="verse-ref">2 Kings 6:16</div><div class="verse-text">"Don't be afraid," the prophet answered. "Those who are with us are more than those who are with them."</div></div>
+    <div class="verse-card"><div class="verse-num">30</div><div class="verse-ref">Psalm 20:7</div><div class="verse-text">Some trust in chariots and some in horses, but we trust in the name of the Lord our God.</div></div>
+    <div class="verse-card"><div class="verse-num">31</div><div class="verse-ref">Nehemiah 4:20</div><div class="verse-text">Wherever you hear the sound of the trumpet, join us there. Our God will fight for us!</div></div>
+    <div class="verse-card"><div class="verse-num">32</div><div class="verse-ref">Isaiah 41:10</div><div class="verse-text">So do not fear, for I am with you; do not be dismayed, for I am your God. I will strengthen you and help you; I will uphold you with my righteous right hand.</div></div>
+    <div class="verse-card"><div class="verse-num">33</div><div class="verse-ref">Exodus 14:14</div><div class="verse-text">The Lord will fight for you; you need only to be still.</div></div>
+  </div>
+</section>
+
+<!-- ══════════════════════════════════════════
+     CHILDREN
+══════════════════════════════════════════ -->
+<section class="section" id="children">
+  <div class="section-hero">
+    <div class="section-icon">👶</div>
+    <h2>Scriptures for Children</h2>
+    <p>Children are a heritage and a blessing from the Lord</p>
+    <div class="verse-count">32 scriptures</div>
+  </div>
+  <div class="verses-grid">
+    <div class="verse-card"><div class="verse-num">01</div><div class="verse-ref">Proverbs 22:6</div><div class="verse-text">Train up a child in the way he should go; even when he is old he will not depart from it.</div></div>
+    <div class="verse-card"><div class="verse-num">02</div><div class="verse-ref">Psalm 127:3</div><div class="verse-text">Children are a heritage from the Lord, offspring a reward from him.</div></div>
+    <div class="verse-card"><div class="verse-num">03</div><div class="verse-ref">Matthew 19:14</div><div class="verse-text">Jesus said, "Let the little children come to me, and do not hinder them, for the kingdom of heaven belongs to such as these."</div></div>
+    <div class="verse-card"><div class="verse-num">04</div><div class="verse-ref">Ephesians 6:1</div><div class="verse-text">Children, obey your parents in the Lord, for this is right.</div></div>
+    <div class="verse-card"><div class="verse-num">05</div><div class="verse-ref">Psalm 103:17</div><div class="verse-text">But from everlasting to everlasting the Lord's love is with those who fear him, and his righteousness with their children's children.</div></div>
+    <div class="verse-card"><div class="verse-num">06</div><div class="verse-ref">Isaiah 54:13</div><div class="verse-text">All your children will be taught by the Lord, and great will be their peace.</div></div>
+    <div class="verse-card"><div class="verse-num">07</div><div class="verse-ref">3 John 1:4</div><div class="verse-text">I have no greater joy than to hear that my children are walking in the truth.</div></div>
+    <div class="verse-card"><div class="verse-num">08</div><div class="verse-ref">Psalm 128:3</div><div class="verse-text">Your children will be like olive shoots around your table.</div></div>
+    <div class="verse-card"><div class="verse-num">09</div><div class="verse-ref">Mark 10:16</div><div class="verse-text">And he took the children in his arms, placed his hands on them and blessed them.</div></div>
+    <div class="verse-card"><div class="verse-num">10</div><div class="verse-ref">Deuteronomy 6:6–7</div><div class="verse-text">These commandments that I give you today are to be on your hearts. Impress them on your children. Talk about them when you sit at home and when you walk along the road.</div></div>
+    <div class="verse-card"><div class="verse-num">11</div><div class="verse-ref">Isaiah 44:3</div><div class="verse-text">For I will pour water on the thirsty land, and streams on the dry ground; I will pour out my Spirit on your offspring, and my blessing on your descendants.</div></div>
+    <div class="verse-card"><div class="verse-num">12</div><div class="verse-ref">Psalm 34:11</div><div class="verse-text">Come, my children, listen to me; I will teach you the fear of the Lord.</div></div>
+    <div class="verse-card"><div class="verse-num">13</div><div class="verse-ref">Acts 2:39</div><div class="verse-text">The promise is for you and your children and for all who are far off — for all whom the Lord our God will call.</div></div>
+    <div class="verse-card"><div class="verse-num">14</div><div class="verse-ref">Proverbs 17:6</div><div class="verse-text">Children's children are a crown to the aged, and parents are the pride of their children.</div></div>
+    <div class="verse-card"><div class="verse-num">15</div><div class="verse-ref">Psalm 127:4</div><div class="verse-text">Like arrows in the hands of a warrior are children born in one's youth.</div></div>
+    <div class="verse-card"><div class="verse-num">16</div><div class="verse-ref">Ephesians 6:4</div><div class="verse-text">Fathers, do not exasperate your children; instead, bring them up in the training and instruction of the Lord.</div></div>
+    <div class="verse-card"><div class="verse-num">17</div><div class="verse-ref">Proverbs 31:28</div><div class="verse-text">Her children arise and call her blessed; her husband also, and he praises her.</div></div>
+    <div class="verse-card"><div class="verse-num">18</div><div class="verse-ref">Matthew 18:3</div><div class="verse-text">"Truly I tell you, unless you change and become like little children, you will never enter the kingdom of heaven."</div></div>
+    <div class="verse-card"><div class="verse-num">19</div><div class="verse-ref">Psalm 148:12–13</div><div class="verse-text">Young men and women, old men and children. Let them praise the name of the Lord, for his name alone is exalted.</div></div>
+    <div class="verse-card"><div class="verse-num">20</div><div class="verse-ref">Colossians 3:20</div><div class="verse-text">Children, obey your parents in everything, for this pleases the Lord.</div></div>
+    <div class="verse-card"><div class="verse-num">21</div><div class="verse-ref">1 Samuel 1:27</div><div class="verse-text">I prayed for this child, and the Lord has granted me what I asked of him.</div></div>
+    <div class="verse-card"><div class="verse-num">22</div><div class="verse-ref">Genesis 33:5</div><div class="verse-text">They are the children God has graciously given your servant.</div></div>
+    <div class="verse-card"><div class="verse-num">23</div><div class="verse-ref">Luke 18:16</div><div class="verse-text">"Let the little children come to me, and do not hinder them, for the kingdom of God belongs to such as these."</div></div>
+    <div class="verse-card"><div class="verse-num">24</div><div class="verse-ref">Psalm 22:9</div><div class="verse-text">Yet you brought me out of the womb; you made me trust in you, even at my mother's breast.</div></div>
+    <div class="verse-card"><div class="verse-num">25</div><div class="verse-ref">Isaiah 49:25</div><div class="verse-text">"I will contend with those who contend with you, and your children I will save," declares the Lord.</div></div>
+    <div class="verse-card"><div class="verse-num">26</div><div class="verse-ref">Titus 2:4</div><div class="verse-text">Then they can urge the younger women to love their husbands and children.</div></div>
+    <div class="verse-card"><div class="verse-num">27</div><div class="verse-ref">Proverbs 13:22</div><div class="verse-text">A good person leaves an inheritance for their children's children.</div></div>
+    <div class="verse-card"><div class="verse-num">28</div><div class="verse-ref">Psalm 78:4</div><div class="verse-text">We will not hide them from their descendants; we will tell the next generation the praiseworthy deeds of the Lord.</div></div>
+    <div class="verse-card"><div class="verse-num">29</div><div class="verse-ref">Matthew 18:10</div><div class="verse-text">"See that you do not despise one of these little ones. For I tell you that their angels in heaven always see the face of my Father in heaven."</div></div>
+    <div class="verse-card"><div class="verse-num">30</div><div class="verse-ref">Jeremiah 31:17</div><div class="verse-text">"So there is hope for your descendants," declares the Lord. "Your children will return to their own land."</div></div>
+    <div class="verse-card"><div class="verse-num">31</div><div class="verse-ref">Psalm 71:5</div><div class="verse-text">For you have been my hope, Sovereign Lord, my confidence since my youth.</div></div>
+    <div class="verse-card"><div class="verse-num">32</div><div class="verse-ref">Isaiah 65:23</div><div class="verse-text">They will not labor in vain, nor will they bear children doomed to misfortune; for they will be a people blessed by the Lord.</div></div>
+  </div>
+</section>
+
+<!-- ══════════════════════════════════════════
+     FAMILY
+══════════════════════════════════════════ -->
+<section class="section" id="family">
+  <div class="section-hero">
+    <div class="section-icon">🏠</div>
+    <h2>Scriptures for Family</h2>
+    <p>A house built on the Lord stands through every storm</p>
+    <div class="verse-count">32 scriptures</div>
+  </div>
+  <div class="verses-grid">
+    <div class="verse-card"><div class="verse-num">01</div><div class="verse-ref">Joshua 24:15</div><div class="verse-text">As for me and my household, we will serve the Lord.</div></div>
+    <div class="verse-card"><div class="verse-num">02</div><div class="verse-ref">Psalm 68:6</div><div class="verse-text">God sets the lonely in families; he leads out the prisoners with singing.</div></div>
+    <div class="verse-card"><div class="verse-num">03</div><div class="verse-ref">Ephesians 5:25</div><div class="verse-text">Husbands, love your wives, just as Christ loved the church and gave himself up for her.</div></div>
+    <div class="verse-card"><div class="verse-num">04</div><div class="verse-ref">Genesis 2:24</div><div class="verse-text">That is why a man leaves his father and mother and is united to his wife, and they become one flesh.</div></div>
+    <div class="verse-card"><div class="verse-num">05</div><div class="verse-ref">Psalm 133:1</div><div class="verse-text">How good and pleasant it is when God's people live together in unity!</div></div>
+    <div class="verse-card"><div class="verse-num">06</div><div class="verse-ref">Ruth 1:16</div><div class="verse-text">Where you go I will go, and where you stay I will stay. Your people will be my people and your God my God.</div></div>
+    <div class="verse-card"><div class="verse-num">07</div><div class="verse-ref">1 Timothy 5:8</div><div class="verse-text">Anyone who does not provide for their relatives, and especially for their own household, has denied the faith.</div></div>
+    <div class="verse-card"><div class="verse-num">08</div><div class="verse-ref">Proverbs 14:26</div><div class="verse-text">Whoever fears the Lord has a secure fortress, and for their children it will be a refuge.</div></div>
+    <div class="verse-card"><div class="verse-num">09</div><div class="verse-ref">Colossians 3:13</div><div class="verse-text">Bear with each other and forgive one another if any of you has a grievance against someone. Forgive as the Lord forgave you.</div></div>
+    <div class="verse-card"><div class="verse-num">10</div><div class="verse-ref">Ephesians 4:32</div><div class="verse-text">Be kind and compassionate to one another, forgiving each other, just as in Christ God forgave you.</div></div>
+    <div class="verse-card"><div class="verse-num">11</div><div class="verse-ref">Proverbs 24:3</div><div class="verse-text">By wisdom a house is built, and through understanding it is established.</div></div>
+    <div class="verse-card"><div class="verse-num">12</div><div class="verse-ref">1 Corinthians 13:4–5</div><div class="verse-text">Love is patient, love is kind. It does not envy, it does not boast, it is not proud. It does not dishonor others, it is not self-seeking.</div></div>
+    <div class="verse-card"><div class="verse-num">13</div><div class="verse-ref">Exodus 20:12</div><div class="verse-text">Honor your father and your mother, so that you may live long in the land the Lord your God is giving you.</div></div>
+    <div class="verse-card"><div class="verse-num">14</div><div class="verse-ref">Matthew 7:24</div><div class="verse-text">Therefore everyone who hears these words of mine and puts them into practice is like a wise man who built his house on the rock.</div></div>
+    <div class="verse-card"><div class="verse-num">15</div><div class="verse-ref">Psalm 128:1–2</div><div class="verse-text">Blessed are all who fear the Lord, who walk in obedience to him. You will eat the fruit of your labor; blessings and prosperity will be yours.</div></div>
+    <div class="verse-card"><div class="verse-num">16</div><div class="verse-ref">Romans 12:10</div><div class="verse-text">Be devoted to one another in love. Honor one another above yourselves.</div></div>
+    <div class="verse-card"><div class="verse-num">17</div><div class="verse-ref">Proverbs 12:4</div><div class="verse-text">A wife of noble character is her husband's crown, but a disgraceful wife is like decay in his bones.</div></div>
+    <div class="verse-card"><div class="verse-num">18</div><div class="verse-ref">Hebrews 13:4</div><div class="verse-text">Marriage should be honored by all, and the marriage bed kept pure, for God will judge the adulterer and all the sexually immoral.</div></div>
+    <div class="verse-card"><div class="verse-num">19</div><div class="verse-ref">1 Peter 3:7</div><div class="verse-text">Husbands, in the same way be considerate as you live with your wives, and treat them with respect as the weaker partner and as heirs with you of the gracious gift of life.</div></div>
+    <div class="verse-card"><div class="verse-num">20</div><div class="verse-ref">Proverbs 31:10</div><div class="verse-text">A wife of noble character who can find? She is worth far more than rubies.</div></div>
+    <div class="verse-card"><div class="verse-num">21</div><div class="verse-ref">Colossians 3:18–19</div><div class="verse-text">Wives, submit yourselves to your husbands, as is fitting in the Lord. Husbands, love your wives and do not be harsh with them.</div></div>
+    <div class="verse-card"><div class="verse-num">22</div><div class="verse-ref">Acts 16:31</div><div class="verse-text">Believe in the Lord Jesus, and you will be saved — you and your household.</div></div>
+    <div class="verse-card"><div class="verse-num">23</div><div class="verse-ref">Isaiah 58:7</div><div class="verse-text">Share your food with the hungry and to provide the poor wanderer with shelter — when you see the naked, to clothe them, and not to turn away from your own flesh and blood.</div></div>
+    <div class="verse-card"><div class="verse-num">24</div><div class="verse-ref">Psalm 127:1</div><div class="verse-text">Unless the Lord builds the house, the builders labor in vain. Unless the Lord watches over the city, the guards stand watch in vain.</div></div>
+    <div class="verse-card"><div class="verse-num">25</div><div class="verse-ref">Ecclesiastes 4:9</div><div class="verse-text">Two are better than one, because they have a good return for their labor.</div></div>
+    <div class="verse-card"><div class="verse-num">26</div><div class="verse-ref">Malachi 2:15</div><div class="verse-text">Has not the one God made you? You belong to him in body and spirit. And what does the one God seek? Godly offspring.</div></div>
+    <div class="verse-card"><div class="verse-num">27</div><div class="verse-ref">1 Corinthians 7:14</div><div class="verse-text">For the unbelieving husband has been sanctified through his wife, and the unbelieving wife has been sanctified through her believing husband. Otherwise your children would be unclean, but as it is, they are holy.</div></div>
+    <div class="verse-card"><div class="verse-num">28</div><div class="verse-ref">Proverbs 15:17</div><div class="verse-text">Better a small serving of vegetables with love than a fattened calf with hatred.</div></div>
+    <div class="verse-card"><div class="verse-num">29</div><div class="verse-ref">Romans 15:7</div><div class="verse-text">Accept one another, then, just as Christ accepted you, in order to bring praise to God.</div></div>
+    <div class="verse-card"><div class="verse-num">30</div><div class="verse-ref">Micah 6:8</div><div class="verse-text">He has shown you, O mortal, what is good. And what does the Lord require of you? To act justly and to love mercy and to walk humbly with your God.</div></div>
+    <div class="verse-card"><div class="verse-num">31</div><div class="verse-ref">Deuteronomy 11:19</div><div class="verse-text">Teach them to your children, talking about them when you sit at home and when you walk along the road, when you lie down and when you get up.</div></div>
+    <div class="verse-card"><div class="verse-num">32</div><div class="verse-ref">1 John 4:7</div><div class="verse-text">Dear friends, let us love one another, for love comes from God. Everyone who loves has been born of God and knows God.</div></div>
+  </div>
+</section>
+
+<!-- ══════════════════════════════════════════
+     PROMISES
+══════════════════════════════════════════ -->
+<section class="section" id="promises">
+  <div class="section-hero">
+    <div class="section-icon">📖</div>
+    <h2>Promises of God</h2>
+    <p>Every promise of God finds its Yes in Jesus Christ</p>
+    <div class="verse-count">33 scriptures</div>
+  </div>
+  <div class="verses-grid">
+    <div class="verse-card"><div class="verse-num">01</div><div class="verse-ref">Jeremiah 29:11</div><div class="verse-text">"For I know the plans I have for you," declares the Lord, "plans to prosper you and not to harm you, plans to give you hope and a future."</div></div>
+    <div class="verse-card"><div class="verse-num">02</div><div class="verse-ref">Romans 8:28</div><div class="verse-text">And we know that in all things God works for the good of those who love him, who have been called according to his purpose.</div></div>
+    <div class="verse-card"><div class="verse-num">03</div><div class="verse-ref">Isaiah 41:10</div><div class="verse-text">So do not fear, for I am with you; do not be dismayed, for I am your God. I will strengthen you and help you; I will uphold you with my righteous right hand.</div></div>
+    <div class="verse-card"><div class="verse-num">04</div><div class="verse-ref">Philippians 4:19</div><div class="verse-text">And my God will meet all your needs according to the riches of his glory in Christ Jesus.</div></div>
+    <div class="verse-card"><div class="verse-num">05</div><div class="verse-ref">Matthew 6:33</div><div class="verse-text">But seek first his kingdom and his righteousness, and all these things will be given to you as well.</div></div>
+    <div class="verse-card"><div class="verse-num">06</div><div class="verse-ref">Hebrews 13:5</div><div class="verse-text">Never will I leave you; never will I forsake you.</div></div>
+    <div class="verse-card"><div class="verse-num">07</div><div class="verse-ref">Isaiah 40:31</div><div class="verse-text">But those who hope in the Lord will renew their strength. They will soar on wings like eagles; they will run and not grow weary, they will walk and not be faint.</div></div>
+    <div class="verse-card"><div class="verse-num">08</div><div class="verse-ref">John 14:27</div><div class="verse-text">Peace I leave with you; my peace I give you. I do not give to you as the world gives. Do not let your hearts be troubled and do not be afraid.</div></div>
+    <div class="verse-card"><div class="verse-num">09</div><div class="verse-ref">Numbers 23:19</div><div class="verse-text">God is not human, that he should lie, not a human being, that he should change his mind. Does he speak and then not act? Does he promise and not fulfill?</div></div>
+    <div class="verse-card"><div class="verse-num">10</div><div class="verse-ref">2 Peter 1:4</div><div class="verse-text">Through these he has given us his very great and precious promises, so that through them you may participate in the divine nature.</div></div>
+    <div class="verse-card"><div class="verse-num">11</div><div class="verse-ref">John 10:10</div><div class="verse-text">The thief comes only to steal and kill and destroy; I have come that they may have life, and have it to the full.</div></div>
+    <div class="verse-card"><div class="verse-num">12</div><div class="verse-ref">Romans 8:38–39</div><div class="verse-text">For I am convinced that neither death nor life, neither angels nor demons, neither the present nor the future, nor any powers, neither height nor depth, nor anything else in all creation, will be able to separate us from the love of God that is in Christ Jesus our Lord.</div></div>
+    <div class="verse-card"><div class="verse-num">13</div><div class="verse-ref">Psalm 37:4</div><div class="verse-text">Take delight in the Lord, and he will give you the desires of your heart.</div></div>
+    <div class="verse-card"><div class="verse-num">14</div><div class="verse-ref">Proverbs 3:5–6</div><div class="verse-text">Trust in the Lord with all your heart and lean not on your own understanding; in all your ways submit to him, and he will make your paths straight.</div></div>
+    <div class="verse-card"><div class="verse-num">15</div><div class="verse-ref">Matthew 11:28</div><div class="verse-text">Come to me, all you who are weary and burdened, and I will give you rest.</div></div>
+    <div class="verse-card"><div class="verse-num">16</div><div class="verse-ref">2 Corinthians 1:20</div><div class="verse-text">For no matter how many promises God has made, they are "Yes" in Christ. And so through him the "Amen" is spoken by us to the glory of God.</div></div>
+    <div class="verse-card"><div class="verse-num">17</div><div class="verse-ref">Isaiah 54:10</div><div class="verse-text">"Though the mountains be shaken and the hills be removed, yet my unfailing love for you will not be shaken," says the Lord, who has compassion on you.</div></div>
+    <div class="verse-card"><div class="verse-num">18</div><div class="verse-ref">Deuteronomy 31:8</div><div class="verse-text">The Lord himself goes before you and will be with you; he will never leave you nor forsake you. Do not be afraid; do not be discouraged.</div></div>
+    <div class="verse-card"><div class="verse-num">19</div><div class="verse-ref">Lamentations 3:22–23</div><div class="verse-text">Because of the Lord's great love we are not consumed, for his compassions never fail. They are new every morning; great is your faithfulness.</div></div>
+    <div class="verse-card"><div class="verse-num">20</div><div class="verse-ref">Psalm 91:15</div><div class="verse-text">He will call on me, and I will answer him; I will be with him in trouble, I will deliver him and honor him.</div></div>
+    <div class="verse-card"><div class="verse-num">21</div><div class="verse-ref">John 3:16</div><div class="verse-text">For God so loved the world that he gave his one and only Son, that whoever believes in him shall not perish but have eternal life.</div></div>
+    <div class="verse-card"><div class="verse-num">22</div><div class="verse-ref">1 John 1:9</div><div class="verse-text">If we confess our sins, he is faithful and just and will forgive us our sins and purify us from all unrighteousness.</div></div>
+    <div class="verse-card"><div class="verse-num">23</div><div class="verse-ref">Malachi 3:10</div><div class="verse-text">Bring the whole tithe into the storehouse, that there may be food in my house. Test me in this," says the Lord Almighty, "and see if I will not throw open the floodgates of heaven and pour out so much blessing.</div></div>
+    <div class="verse-card"><div class="verse-num">24</div><div class="verse-ref">Psalm 23:6</div><div class="verse-text">Surely your goodness and love will follow me all the days of my life, and I will dwell in the house of the Lord forever.</div></div>
+    <div class="verse-card"><div class="verse-num">25</div><div class="verse-ref">Revelation 21:4</div><div class="verse-text">He will wipe every tear from their eyes. There will be no more death or mourning or crying or pain, for the old order of things has passed away.</div></div>
+    <div class="verse-card"><div class="verse-num">26</div><div class="verse-ref">James 1:5</div><div class="verse-text">If any of you lacks wisdom, you should ask God, who gives generously to all without finding fault, and it will be given to you.</div></div>
+    <div class="verse-card"><div class="verse-num">27</div><div class="verse-ref">Romans 6:23</div><div class="verse-text">For the wages of sin is death, but the gift of God is eternal life in Christ Jesus our Lord.</div></div>
+    <div class="verse-card"><div class="verse-num">28</div><div class="verse-ref">Philippians 1:6</div><div class="verse-text">Being confident of this, that he who began a good work in you will carry it on to completion until the day of Christ Jesus.</div></div>
+    <div class="verse-card"><div class="verse-num">29</div><div class="verse-ref">Isaiah 43:2</div><div class="verse-text">When you pass through the waters, I will be with you; and when you pass through the rivers, they will not sweep over you. When you walk through the fire, you will not be burned.</div></div>
+    <div class="verse-card"><div class="verse-num">30</div><div class="verse-ref">Joshua 1:8</div><div class="verse-text">Keep this Book of the Law always on your lips; meditate on it day and night, so that you may be careful to do everything written in it. Then you will be prosperous and successful.</div></div>
+    <div class="verse-card"><div class="verse-num">31</div><div class="verse-ref">Psalm 84:11</div><div class="verse-text">For the Lord God is a sun and shield; the Lord bestows favor and honor; no good thing does he withhold from those whose walk is blameless.</div></div>
+    <div class="verse-card"><div class="verse-num">32</div><div class="verse-ref">Matthew 7:7</div><div class="verse-text">Ask and it will be given to you; seek and you will find; knock and the door will be opened to you.</div></div>
+    <div class="verse-card"><div class="verse-num">33</div><div class="verse-ref">John 14:2–3</div><div class="verse-text">My Father's house has many rooms; if that were not so, would I have told you that I am going there to prepare a place for you? And if I go and prepare a place for you, I will come back and take you to be with me.</div></div>
+  </div>
+</section>
+
+
+<!-- ══════════════════════════════════════════
+     FINANCES & PROSPERITY
+══════════════════════════════════════════ -->
+<section class="section" id="finances">
+  <div class="section-hero">
+    <div class="section-icon">💰</div>
+    <h2>Finances & Prosperity</h2>
+    <p>What Scripture says about money, giving, debt, contentment, and God's provision.</p>
+    <div class="verse-count">35 scriptures</div>
+  </div>
+  <div class="verses-grid">
+    <div class="verse-card"><div class="verse-num">01</div><div class="verse-ref">Malachi 3:10</div><div class="verse-text">"Bring the whole tithe into the storehouse, that there may be food in my house. Test me in this," says the Lord Almighty, "and see if I will not throw open the floodgates of heaven and pour out so much blessing that there will not be room enough to store it."</div></div>
+    <div class="verse-card"><div class="verse-num">02</div><div class="verse-ref">Proverbs 3:9–10</div><div class="verse-text">Honor the Lord with your wealth, with the firstfruits of all your crops; then your barns will be filled to overflowing, and your vats will brim over with new wine.</div></div>
+    <div class="verse-card"><div class="verse-num">03</div><div class="verse-ref">Luke 6:38</div><div class="verse-text">Give, and it will be given to you. A good measure, pressed down, shaken together and running over, will be poured into your lap. For with the measure you use, it will be measured to you.</div></div>
+    <div class="verse-card"><div class="verse-num">04</div><div class="verse-ref">Deuteronomy 8:18</div><div class="verse-text">But remember the Lord your God, for it is he who gives you the ability to produce wealth, and so confirms his covenant, which he swore to your ancestors, as it is today.</div></div>
+    <div class="verse-card"><div class="verse-num">05</div><div class="verse-ref">Philippians 4:19</div><div class="verse-text">And my God will meet all your needs according to the riches of his glory in Christ Jesus.</div></div>
+    <div class="verse-card"><div class="verse-num">06</div><div class="verse-ref">2 Corinthians 9:6–7</div><div class="verse-text">Whoever sows sparingly will also reap sparingly, and whoever sows generously will also reap generously. Each of you should give what you have decided in your heart to give, not reluctantly or under compulsion, for God loves a cheerful giver.</div></div>
+    <div class="verse-card"><div class="verse-num">07</div><div class="verse-ref">Matthew 6:33</div><div class="verse-text">But seek first his kingdom and his righteousness, and all these things will be given to you as well.</div></div>
+    <div class="verse-card"><div class="verse-num">08</div><div class="verse-ref">Proverbs 22:7</div><div class="verse-text">The rich rule over the poor, and the borrower is slave to the lender.</div></div>
+    <div class="verse-card"><div class="verse-num">09</div><div class="verse-ref">Proverbs 13:11</div><div class="verse-text">Dishonest money dwindles away, but whoever gathers money little by little makes it grow.</div></div>
+    <div class="verse-card"><div class="verse-num">10</div><div class="verse-ref">Proverbs 21:5</div><div class="verse-text">The plans of the diligent lead to profit as surely as haste leads to poverty.</div></div>
+    <div class="verse-card"><div class="verse-num">11</div><div class="verse-ref">1 Timothy 6:10</div><div class="verse-text">For the love of money is a root of all kinds of evil. Some people, eager for money, have wandered from the faith and pierced themselves with many griefs.</div></div>
+    <div class="verse-card"><div class="verse-num">12</div><div class="verse-ref">Matthew 6:24</div><div class="verse-text">No one can serve two masters. Either you will hate the one and love the other, or you will be devoted to the one and despise the other. You cannot serve both God and money.</div></div>
+    <div class="verse-card"><div class="verse-num">13</div><div class="verse-ref">Ecclesiastes 5:10</div><div class="verse-text">Whoever loves money never has enough; whoever loves wealth is never satisfied with their income. This too is meaningless.</div></div>
+    <div class="verse-card"><div class="verse-num">14</div><div class="verse-ref">Hebrews 13:5</div><div class="verse-text">Keep your lives free from the love of money and be content with what you have, because God has said, "Never will I leave you; never will I forsake you."</div></div>
+    <div class="verse-card"><div class="verse-num">15</div><div class="verse-ref">Philippians 4:11–12</div><div class="verse-text">I have learned to be content whatever the circumstances. I know what it is to be in need, and I know what it is to have plenty. I have learned the secret of being content in any and every situation.</div></div>
+    <div class="verse-card"><div class="verse-num">16</div><div class="verse-ref">Proverbs 11:24–25</div><div class="verse-text">One person gives freely, yet gains even more; another withholds unduly, but comes to poverty. A generous person will prosper; whoever refreshes others will be refreshed.</div></div>
+    <div class="verse-card"><div class="verse-num">17</div><div class="verse-ref">Proverbs 22:1</div><div class="verse-text">A good name is more desirable than great riches; to be esteemed is better than silver or gold.</div></div>
+    <div class="verse-card"><div class="verse-num">18</div><div class="verse-ref">Luke 12:15</div><div class="verse-text">Watch out! Be on your guard against all kinds of greed; life does not consist in an abundance of possessions.</div></div>
+    <div class="verse-card"><div class="verse-num">19</div><div class="verse-ref">3 John 1:2</div><div class="verse-text">Dear friend, I pray that you may enjoy good health and that all may go well with you, even as your soul is getting along well.</div></div>
+    <div class="verse-card"><div class="verse-num">20</div><div class="verse-ref">Proverbs 10:22</div><div class="verse-text">The blessing of the Lord brings wealth, without painful toil for it.</div></div>
+    <div class="verse-card"><div class="verse-num">21</div><div class="verse-ref">Joshua 1:8</div><div class="verse-text">Keep this Book of the Law always on your lips; meditate on it day and night, so that you may be careful to do everything written in it. Then you will be prosperous and successful.</div></div>
+    <div class="verse-card"><div class="verse-num">22</div><div class="verse-ref">Proverbs 6:6–8</div><div class="verse-text">Go to the ant, you sluggard; consider its ways and be wise! It has no commander, no overseer or ruler, yet it stores its provisions in summer and gathers its food at harvest.</div></div>
+    <div class="verse-card"><div class="verse-num">23</div><div class="verse-ref">Psalm 37:25</div><div class="verse-text">I was young and now I am old, yet I have never seen the righteous forsaken or their children begging bread.</div></div>
+    <div class="verse-card"><div class="verse-num">24</div><div class="verse-ref">Proverbs 28:27</div><div class="verse-text">Those who give to the poor will lack nothing, but those who close their eyes to them receive many curses.</div></div>
+    <div class="verse-card"><div class="verse-num">25</div><div class="verse-ref">Romans 13:8</div><div class="verse-text">Let no debt remain outstanding, except the continuing debt to love one another, for whoever loves others has fulfilled the law.</div></div>
+    <div class="verse-card"><div class="verse-num">26</div><div class="verse-ref">Luke 14:28</div><div class="verse-text">Suppose one of you wants to build a tower. Won't you first sit down and estimate the cost to see if you have enough money to complete it?</div></div>
+    <div class="verse-card"><div class="verse-num">27</div><div class="verse-ref">Matthew 25:21</div><div class="verse-text">"Well done, good and faithful servant! You have been faithful with a few things; I will put you in charge of many things. Come and share your master's happiness!"</div></div>
+    <div class="verse-card"><div class="verse-num">28</div><div class="verse-ref">Proverbs 27:23–24</div><div class="verse-text">Be sure you know the condition of your flocks, give careful attention to your herds; for riches do not endure forever, and a crown is not secure for all generations.</div></div>
+    <div class="verse-card"><div class="verse-num">29</div><div class="verse-ref">Psalm 24:1</div><div class="verse-text">The earth is the Lord's, and everything in it, the world, and all who live in it.</div></div>
+    <div class="verse-card"><div class="verse-num">30</div><div class="verse-ref">Luke 16:10</div><div class="verse-text">Whoever can be trusted with very little can also be trusted with much, and whoever is dishonest with very little will also be dishonest with much.</div></div>
+    <div class="verse-card"><div class="verse-num">31</div><div class="verse-ref">Proverbs 3:27–28</div><div class="verse-text">Do not withhold good from those to whom it is due, when it is in your power to act. Do not say to your neighbor, "Come back tomorrow and I'll give it to you" — when you already have it with you.</div></div>
+    <div class="verse-card"><div class="verse-num">32</div><div class="verse-ref">Isaiah 48:17</div><div class="verse-text">This is what the Lord says — your Redeemer, the Holy One of Israel: "I am the Lord your God, who teaches you what is best for you, who directs you in the way you should go."</div></div>
+    <div class="verse-card"><div class="verse-num">33</div><div class="verse-ref">Proverbs 23:4–5</div><div class="verse-text">Do not wear yourself out to get rich; do not trust your own cleverness. Cast but a glance at riches, and they are gone, for they will surely sprout wings and fly off to the sky like an eagle.</div></div>
+    <div class="verse-card"><div class="verse-num">34</div><div class="verse-ref">1 Chronicles 29:14</div><div class="verse-text">But who am I, and who are my people, that we should be able to give as generously as this? Everything comes from you, and we have given you only what comes from your hand.</div></div>
+    <div class="verse-card"><div class="verse-num">35</div><div class="verse-ref">Proverbs 19:17</div><div class="verse-text">Whoever is kind to the poor lends to the Lord, and he will reward them for what they have done.</div></div>
+  </div>
+</section>
+
+<!-- ══════════════════════════════════════════
+     OPEN DOORS
+══════════════════════════════════════════ -->
+<section class="section" id="doors">
+  <div class="section-hero">
+    <div class="section-icon">🚪</div>
+    <h2>Scriptures of Open Doors</h2>
+    <p>What God opens, no man can shut — walk through with boldness</p>
+    <div class="verse-count">30 scriptures</div>
+  </div>
+  <div class="verses-grid">
+    <div class="verse-card"><div class="verse-num">01</div><div class="verse-ref">Revelation 3:8</div><div class="verse-text">See, I have placed before you an open door that no one can shut. I know that you have little strength, yet you have kept my word and have not denied my name.</div></div>
+    <div class="verse-card"><div class="verse-num">02</div><div class="verse-ref">Matthew 7:7</div><div class="verse-text">Ask and it will be given to you; seek and you will find; knock and the door will be opened to you.</div></div>
+    <div class="verse-card"><div class="verse-num">03</div><div class="verse-ref">1 Corinthians 16:9</div><div class="verse-text">Because a great door for effective work has opened to me, and there are many who oppose me.</div></div>
+    <div class="verse-card"><div class="verse-num">04</div><div class="verse-ref">Colossians 4:3</div><div class="verse-text">And pray for us, too, that God may open a door for our message, so that we may proclaim the mystery of Christ, for which I am in chains.</div></div>
+    <div class="verse-card"><div class="verse-num">05</div><div class="verse-ref">Revelation 3:20</div><div class="verse-text">Here I am! I stand at the door and knock. If anyone hears my voice and opens the door, I will come in and eat with that person, and they with me.</div></div>
+    <div class="verse-card"><div class="verse-num">06</div><div class="verse-ref">Isaiah 22:22</div><div class="verse-text">I will place on his shoulder the key to the house of David; what he opens no one can shut, and what he shuts no one can open.</div></div>
+    <div class="verse-card"><div class="verse-num">07</div><div class="verse-ref">Acts 14:27</div><div class="verse-text">They gathered the church together and reported all that God had done through them and how he had opened a door of faith to the Gentiles.</div></div>
+    <div class="verse-card"><div class="verse-num">08</div><div class="verse-ref">John 10:9</div><div class="verse-text">I am the gate; whoever enters through me will be saved. They will come in and go out, and find pasture.</div></div>
+    <div class="verse-card"><div class="verse-num">09</div><div class="verse-ref">Psalm 24:7</div><div class="verse-text">Lift up your heads, you gates; be lifted up, you ancient doors, that the King of glory may come in.</div></div>
+    <div class="verse-card"><div class="verse-num">10</div><div class="verse-ref">Acts 16:26</div><div class="verse-text">Suddenly there was such a violent earthquake that the foundations of the prison were shaken. At once all the prison doors flew open, and everyone's chains came loose.</div></div>
+    <div class="verse-card"><div class="verse-num">11</div><div class="verse-ref">2 Corinthians 2:12</div><div class="verse-text">Now when I went to Troas to preach the gospel of Christ and found that the Lord had opened a door for me.</div></div>
+    <div class="verse-card"><div class="verse-num">12</div><div class="verse-ref">Isaiah 45:1</div><div class="verse-text">This is what the Lord says to his anointed, to Cyrus, whose right hand I take hold of to subdue nations before him and to strip kings of their armor, to open doors before him so that gates will not be shut.</div></div>
+    <div class="verse-card"><div class="verse-num">13</div><div class="verse-ref">Revelation 4:1</div><div class="verse-text">After this I looked, and there before me was a door standing open in heaven.</div></div>
+    <div class="verse-card"><div class="verse-num">14</div><div class="verse-ref">Malachi 3:10</div><div class="verse-text">See if I will not throw open the floodgates of heaven and pour out so much blessing that there will not be room enough to store it.</div></div>
+    <div class="verse-card"><div class="verse-num">15</div><div class="verse-ref">Hosea 2:15</div><div class="verse-text">There I will give her back her vineyards, and will make the Valley of Achor a door of hope.</div></div>
+    <div class="verse-card"><div class="verse-num">16</div><div class="verse-ref">Isaiah 43:19</div><div class="verse-text">See, I am doing a new thing! Now it springs up; do you not perceive it? I am making a way in the wilderness and streams in the wasteland.</div></div>
+    <div class="verse-card"><div class="verse-num">17</div><div class="verse-ref">Deuteronomy 28:12</div><div class="verse-text">The Lord will open the heavens, the storehouse of his bounty, to send rain on your land in season and to bless all the work of your hands.</div></div>
+    <div class="verse-card"><div class="verse-num">18</div><div class="verse-ref">Psalm 118:19–20</div><div class="verse-text">Open for me the gates of the righteous; I will enter and give thanks to the Lord. This is the gate of the Lord through which the righteous may enter.</div></div>
+    <div class="verse-card"><div class="verse-num">19</div><div class="verse-ref">Proverbs 8:34</div><div class="verse-text">Blessed are those who listen to me, watching daily at my doors, waiting at my doorway.</div></div>
+    <div class="verse-card"><div class="verse-num">20</div><div class="verse-ref">Luke 11:9</div><div class="verse-text">So I say to you: Ask and it will be given to you; seek and you will find; knock and the door will be opened to you.</div></div>
+    <div class="verse-card"><div class="verse-num">21</div><div class="verse-ref">Isaiah 26:2</div><div class="verse-text">Open the gates that the righteous nation may enter, the nation that keeps faith.</div></div>
+    <div class="verse-card"><div class="verse-num">22</div><div class="verse-ref">Nehemiah 1:11</div><div class="verse-text">Lord, let your ear be attentive to the prayer of this your servant and to the prayer of your servants who delight in revering your name. Give your servant success today by granting him favor.</div></div>
+    <div class="verse-card"><div class="verse-num">23</div><div class="verse-ref">Psalm 78:23</div><div class="verse-text">Yet he gave a command to the skies above and opened the doors of the heavens.</div></div>
+    <div class="verse-card"><div class="verse-num">24</div><div class="verse-ref">Acts 12:10</div><div class="verse-text">They passed the first and second guards and came to the iron gate leading to the city. It opened for them by itself, and they went through it.</div></div>
+    <div class="verse-card"><div class="verse-num">25</div><div class="verse-ref">Isaiah 60:11</div><div class="verse-text">Your gates will always stand open, they will never be shut, day or night, so that people may bring you the wealth of the nations.</div></div>
+    <div class="verse-card"><div class="verse-num">26</div><div class="verse-ref">Psalm 24:9</div><div class="verse-text">Lift up your heads, you gates; lift them up, you ancient doors, that the King of glory may come in.</div></div>
+    <div class="verse-card"><div class="verse-num">27</div><div class="verse-ref">Ezekiel 46:12</div><div class="verse-text">When the prince provides a freewill offering — a burnt offering or fellowship offerings — as a freewill offering to the Lord, the gate facing east is to be opened for him.</div></div>
+    <div class="verse-card"><div class="verse-num">28</div><div class="verse-ref">Proverbs 11:25</div><div class="verse-text">A generous person will prosper; whoever refreshes others will be refreshed.</div></div>
+    <div class="verse-card"><div class="verse-num">29</div><div class="verse-ref">1 Kings 8:29</div><div class="verse-text">May your eyes be open toward this temple night and day, this place of which you said, "My Name shall be there," so that you will hear the prayer your servant prays toward this place.</div></div>
+    <div class="verse-card"><div class="verse-num">30</div><div class="verse-ref">Revelation 21:25</div><div class="verse-text">On no day will its gates ever be shut, for there will be no night there.</div></div>
+  </div>
+</section>
+
+<!-- ══════════════════════════════════════════
+     GOOD HEALTH
+══════════════════════════════════════════ -->
+<section class="section" id="health">
+  <div class="section-hero">
+    <div class="section-icon">💚</div>
+    <h2>Scriptures for Good Health</h2>
+    <p>The God who heals — Jehovah Rapha — restores completely</p>
+    <div class="verse-count">32 scriptures</div>
+  </div>
+  <div class="verses-grid">
+    <div class="verse-card"><div class="verse-num">01</div><div class="verse-ref">3 John 1:2</div><div class="verse-text">Dear friend, I pray that you may enjoy good health and that all may go well with you, even as your soul is getting along well.</div></div>
+    <div class="verse-card"><div class="verse-num">02</div><div class="verse-ref">Psalm 103:2–3</div><div class="verse-text">Praise the Lord, my soul, and forget not all his benefits — who forgives all your sins and heals all your diseases.</div></div>
+    <div class="verse-card"><div class="verse-num">03</div><div class="verse-ref">Isaiah 53:5</div><div class="verse-text">But he was pierced for our transgressions, he was crushed for our iniquities; the punishment that brought us peace was on him, and by his wounds we are healed.</div></div>
+    <div class="verse-card"><div class="verse-num">04</div><div class="verse-ref">Exodus 15:26</div><div class="verse-text">I am the Lord, who heals you.</div></div>
+    <div class="verse-card"><div class="verse-num">05</div><div class="verse-ref">Jeremiah 30:17</div><div class="verse-text">"But I will restore you to health and heal your wounds," declares the Lord.</div></div>
+    <div class="verse-card"><div class="verse-num">06</div><div class="verse-ref">1 Peter 2:24</div><div class="verse-text">He himself bore our sins in his body on the cross, so that we might die to sins and live for righteousness; by his wounds you have been healed.</div></div>
+    <div class="verse-card"><div class="verse-num">07</div><div class="verse-ref">Psalm 107:20</div><div class="verse-text">He sent out his word and healed them; he rescued them from the grave.</div></div>
+    <div class="verse-card"><div class="verse-num">08</div><div class="verse-ref">James 5:14–15</div><div class="verse-text">Is anyone among you sick? Let them call the elders of the church to pray over them and anoint them with oil in the name of the Lord. And the prayer offered in faith will make the sick person well.</div></div>
+    <div class="verse-card"><div class="verse-num">09</div><div class="verse-ref">Proverbs 4:22</div><div class="verse-text">For they are life to those who find them and health to one's whole body.</div></div>
+    <div class="verse-card"><div class="verse-num">10</div><div class="verse-ref">Matthew 8:17</div><div class="verse-text">He took up our infirmities and bore our diseases.</div></div>
+    <div class="verse-card"><div class="verse-num">11</div><div class="verse-ref">Psalm 41:3</div><div class="verse-text">The Lord sustains them on their sickbed and restores them from their bed of illness.</div></div>
+    <div class="verse-card"><div class="verse-num">12</div><div class="verse-ref">Proverbs 17:22</div><div class="verse-text">A cheerful heart is good medicine, but a crushed spirit dries up the bones.</div></div>
+    <div class="verse-card"><div class="verse-num">13</div><div class="verse-ref">Acts 10:38</div><div class="verse-text">God anointed Jesus of Nazareth with the Holy Spirit and power, and how he went around doing good and healing all who were under the power of the devil, because God was with him.</div></div>
+    <div class="verse-card"><div class="verse-num">14</div><div class="verse-ref">Malachi 4:2</div><div class="verse-text">But for you who revere my name, the sun of righteousness will rise with healing in its rays. And you will go out and frolic like well-fed calves.</div></div>
+    <div class="verse-card"><div class="verse-num">15</div><div class="verse-ref">Luke 9:11</div><div class="verse-text">He welcomed them and spoke to them about the kingdom of God, and healed those who needed healing.</div></div>
+    <div class="verse-card"><div class="verse-num">16</div><div class="verse-ref">Isaiah 58:8</div><div class="verse-text">Then your light will break forth like the dawn, and your healing will quickly appear; then your righteousness will go before you.</div></div>
+    <div class="verse-card"><div class="verse-num">17</div><div class="verse-ref">Romans 8:11</div><div class="verse-text">And if the Spirit of him who raised Jesus from the dead is living in you, he who raised Christ from the dead will also give life to your mortal bodies because of his Spirit who lives in you.</div></div>
+    <div class="verse-card"><div class="verse-num">18</div><div class="verse-ref">Proverbs 3:7–8</div><div class="verse-text">Do not be wise in your own eyes; fear the Lord and shun evil. This will bring health to your body and nourishment to your bones.</div></div>
+    <div class="verse-card"><div class="verse-num">19</div><div class="verse-ref">Psalm 30:2</div><div class="verse-text">Lord my God, I called to you for help, and you healed me.</div></div>
+    <div class="verse-card"><div class="verse-num">20</div><div class="verse-ref">Matthew 4:23</div><div class="verse-text">Jesus went throughout Galilee, teaching in their synagogues, proclaiming the good news of the kingdom, and healing every disease and sickness among the people.</div></div>
+    <div class="verse-card"><div class="verse-num">21</div><div class="verse-ref">Ezekiel 36:26</div><div class="verse-text">I will give you a new heart and put a new spirit in you; I will remove from you your heart of stone and give you a heart of flesh.</div></div>
+    <div class="verse-card"><div class="verse-num">22</div><div class="verse-ref">2 Chronicles 7:14</div><div class="verse-text">If my people, who are called by my name, will humble themselves and pray and seek my face and turn from their wicked ways, then I will hear from heaven, and I will forgive their sin and will heal their land.</div></div>
+    <div class="verse-card"><div class="verse-num">23</div><div class="verse-ref">Isaiah 57:19</div><div class="verse-text">"Peace, peace, to those far and near," says the Lord. "And I will heal them."</div></div>
+    <div class="verse-card"><div class="verse-num">24</div><div class="verse-ref">Hosea 14:4</div><div class="verse-text">"I will heal their waywardness and love them freely, for my anger has turned away from them," says the Lord.</div></div>
+    <div class="verse-card"><div class="verse-num">25</div><div class="verse-ref">Numbers 21:8</div><div class="verse-text">The Lord said to Moses, "Make a snake and put it up on a pole; anyone who is bitten can look at it and live."</div></div>
+    <div class="verse-card"><div class="verse-num">26</div><div class="verse-ref">Psalm 147:3</div><div class="verse-text">He heals the brokenhearted and binds up their wounds.</div></div>
+    <div class="verse-card"><div class="verse-num">27</div><div class="verse-ref">Deuteronomy 7:15</div><div class="verse-text">The Lord will keep you free from every disease. He will not inflict on you the horrible diseases you knew in Egypt, but he will inflict them on all who hate you.</div></div>
+    <div class="verse-card"><div class="verse-num">28</div><div class="verse-ref">Mark 5:34</div><div class="verse-text">He said to her, "Daughter, your faith has healed you. Go in peace and be freed from your suffering."</div></div>
+    <div class="verse-card"><div class="verse-num">29</div><div class="verse-ref">Luke 4:18</div><div class="verse-text">He has sent me to proclaim freedom for the prisoners and recovery of sight for the blind, to set the oppressed free.</div></div>
+    <div class="verse-card"><div class="verse-num">30</div><div class="verse-ref">Psalm 34:19–20</div><div class="verse-text">The righteous person may have many troubles, but the Lord delivers him from them all; he protects all his bones, not one of them will be broken.</div></div>
+    <div class="verse-card"><div class="verse-num">31</div><div class="verse-ref">Isaiah 61:1</div><div class="verse-text">The Spirit of the Sovereign Lord is on me, because the Lord has anointed me to proclaim good news to the poor. He has sent me to bind up the brokenhearted.</div></div>
+    <div class="verse-card"><div class="verse-num">32</div><div class="verse-ref">Revelation 22:2</div><div class="verse-text">The leaves of the tree are for the healing of the nations.</div></div>
+  </div>
+</section>
+
+<footer>
+  <p>"Your word is a lamp to my feet and a light to my path." — <span>Psalm 119:105</span></p>
+  <p style="margin-top:10px; font-size:13px;">Scripture Treasury · All verses from the NIV &amp; ESV translations</p>
+</footer>
+
+<script>
+  function show(id, el) {
+    document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+    document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+    document.getElementById(id).classList.add('active');
+    el.classList.add('active');
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }
+</script>
+</body>
+</html>
